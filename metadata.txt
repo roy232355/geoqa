@@ -6,6 +6,7 @@ about=GeoQA is an open-source QGIS plugin that automatically audits vector layer
 version=1.0.0
 author=Rahul
 email=rahulmishak2323@gmail.com
+homepage=https://github.com/roy232355/geoqa
 repository=https://github.com/roy232355/geoqa
 tracker=https://github.com/roy232355/geoqa/issues
 icon=icons/icon.png
