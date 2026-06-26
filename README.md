@@ -1,6 +1,12 @@
 # GeoQA – GIS Data Quality Auditor
 
-> **The first step of every GIS workflow.**
+[![QGIS Plugin](https://img.shields.io/badge/QGIS-Plugin%20Repository-589632?logo=qgis&logoColor=white)](https://plugins.qgis.org/plugins/GeoQA)
+[![Version](https://img.shields.io/badge/version-1.0.0-blue)](https://github.com/roy232355/geoqa/releases/tag/v1.0.0)
+[![License](https://img.shields.io/badge/license-GPL%20v3-green)](LICENSE)
+[![QGIS](https://img.shields.io/badge/QGIS-%3E%3D%203.28-589632)](https://qgis.org)
+[![Status](https://img.shields.io/badge/status-stable-brightgreen)]()
+
+> **Validate first. Analyze second.**
 
 Validate your GIS data before analysis.
 
