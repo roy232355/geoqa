@@ -9,9 +9,9 @@ plugin_root = os.path.dirname(current_dir)
 if plugin_root not in sys.path:
     sys.path.insert(0, plugin_root)
 
-from core.engine import ValidationEngine
-from core.models import Severity
-from tests.mocks import MockVectorLayer, MockFeature, MockGeometry, MockCRS, MockField
+from core.engine import ValidationEngine  # noqa: E402
+from core.models import Severity  # noqa: E402
+from tests.mocks import MockVectorLayer, MockFeature, MockGeometry, MockCRS, MockField  # noqa: E402
 
 
 def run_stress_test(feature_count=10000):

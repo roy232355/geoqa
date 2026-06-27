@@ -44,16 +44,14 @@ class A006_NumericStrings(Rule):
         for idx, feature in enumerate(
             GISCompat.get_features_for_attributes(layer, string_fields)
         ):
-            if (
-                idx % 5000 == 0
-                and checker
-                and (
+            if idx % 5000 == 0 and checker:
+                is_cancelled = (
                     checker.isCanceled()
                     if hasattr(checker, "isCanceled")
                     else checker.isCancelled()
                 )
-            ):
-                return []
+                if is_cancelled:
+                    return []
 
             for name in string_fields:
                 val = feature[name]

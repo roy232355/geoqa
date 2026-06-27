@@ -24,16 +24,14 @@ class G001_InvalidGeometry(Rule):
 
         invalid_fids = []
         for idx, feature in enumerate(GISCompat.get_features_for_geometry(layer)):
-            if (
-                idx % 5000 == 0
-                and checker
-                and (
+            if idx % 5000 == 0 and checker:
+                is_cancelled = (
                     checker.isCanceled()
                     if hasattr(checker, "isCanceled")
                     else checker.isCancelled()
                 )
-            ):
-                return []
+                if is_cancelled:
+                    return []
 
             geom = GISCompat.get_geometry(feature)
             if GISCompat.is_geometry_null_or_empty(geom):

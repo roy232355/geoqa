@@ -68,9 +68,9 @@ def generate_html_report(
     # --- Severity badge HTML helper ---
     def sev_badge(sev_value: str) -> str:
         colours = {
-            "low":      ("E0F2FE", "0369A1"),
-            "medium":   ("FEF9C3", "854D0E"),
-            "high":     ("FEF3C7", "C2410C"),
+            "low": ("E0F2FE", "0369A1"),
+            "medium": ("FEF9C3", "854D0E"),
+            "high": ("FEF3C7", "C2410C"),
             "critical": ("FEE2E2", "991B1B"),
         }
         bg, fg = colours.get(sev_value.lower(), ("F1F5F9", "475569"))

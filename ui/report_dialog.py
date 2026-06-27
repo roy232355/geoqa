@@ -100,18 +100,18 @@ class ReportDialog(QDialog):
 
         # Footer Actions
         bottom_layout = QHBoxLayout()
-        
+
         footer_brand_lbl = QLabel("GeoQA v1.0.0")
         footer_brand_lbl.setStyleSheet("font-weight: bold; color: #94A3B8; font-size: 11px;")
-        
+
         self.open_last_report_btn = QPushButton("Open Last Report")
         self.open_last_report_btn.setVisible(False)
         self.open_last_report_btn.clicked.connect(self.open_last_report)
         self.open_last_report_btn.setStyleSheet("color: #2563EB; font-weight: bold;")
-        
+
         self.export_btn = QPushButton("Export")
         self.export_btn.setEnabled(False)
-        
+
         export_menu = QMenu(self)
         export_html_action = QAction("Export HTML", self)
         export_html_action.triggered.connect(self.open_last_report)
@@ -374,10 +374,13 @@ class ReportDialog(QDialog):
             try:
                 geom_type = layer.geometryType()
                 geom_str = "Unknown"
-                if geom_type == 0: geom_str = "Point"
-                elif geom_type == 1: geom_str = "Line"
-                elif geom_type == 2: geom_str = "Polygon"
-                
+                if geom_type == 0:
+                    geom_str = "Point"
+                elif geom_type == 1:
+                    geom_str = "Line"
+                elif geom_type == 2:
+                    geom_str = "Polygon"
+
                 crs_str = layer.crs().authid() if layer.crs().isValid() else "No CRS"
                 display_text = f"{layer.name()}  ({geom_str} - {crs_str})"
             except Exception:
@@ -609,7 +612,6 @@ class ReportDialog(QDialog):
 
         score = project_summary.calculate_score()
         grade = project_summary.get_grade()
-        grade_desc = project_summary.get_grade_description()
 
         # Write HTML dashboard report to a secure temporary file
         try:

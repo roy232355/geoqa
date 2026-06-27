@@ -115,14 +115,14 @@ class LayerSummary:
             Severity.MEDIUM: 5.0,
             Severity.LOW: 2.0,
         }
-        
+
         cat_scores = {
             "Geometry": 100.0,
             "CRS": 100.0,
             "Attribute": 100.0,
             "Topology": 100.0
         }
-        
+
         for issue in self.issues:
             base_penalty = penalties_config.get(issue.severity, 2.0)
             if issue.affected_features and self.feature_count > 0:
@@ -130,11 +130,11 @@ class LayerSummary:
                 penalty = base_penalty * affected_ratio
             else:
                 penalty = base_penalty
-                
+
             cat_name = issue.category.value
             if cat_name in cat_scores:
                 cat_scores[cat_name] -= penalty
-                
+
         # Round and bound 0-100
         return {cat: max(0, min(100, round(score))) for cat, score in cat_scores.items()}
 

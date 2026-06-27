@@ -2,8 +2,6 @@
 """Dynamically discovers and registers validation rules for the GeoQA engine."""
 import os
 import json
-import importlib
-import inspect
 from typing import List
 
 from .base import Rule

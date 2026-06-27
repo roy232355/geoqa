@@ -38,7 +38,7 @@ class ResourceManager:
         QDialog {
             background-color: #F8FAFC;
         }
-        
+
         QTabWidget::pane {
             border: 1px solid #E2E8F0;
             background-color: #FFFFFF;
@@ -67,7 +67,7 @@ class ResourceManager:
             background-color: #E2E8F0;
             color: #2D3748;
         }
-        
+
         QPushButton {
             background-color: #FFFFFF;
             border: 1px solid #CBD5E1;
@@ -89,7 +89,7 @@ class ResourceManager:
             color: #94A3B8;
             border-color: #E2E8F0;
         }
-        
+
         QPushButton#primaryBtn {
             background-color: #2563EB;
             color: #FFFFFF;
@@ -119,7 +119,7 @@ class ResourceManager:
             color: #94A3B8;
             border-color: #E2E8F0;
         }
-        
+
         QComboBox {
             border: 1px solid #CBD5E1;
             border-radius: 4px;
@@ -131,7 +131,7 @@ class ResourceManager:
         QComboBox:hover {
             border-color: #94A3B8;
         }
-        
+
         QListWidget {
             border: 1px solid #E2E8F0;
             border-radius: 6px;
@@ -163,7 +163,7 @@ class ResourceManager:
         QLineEdit:focus {
             border-color: #2563EB;
         }
-        
+
         QTableWidget {
             border: 1px solid #E2E8F0;
             border-radius: 6px;
