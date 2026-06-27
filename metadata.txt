@@ -1,4 +1,4 @@
-﻿[general]
+[general]
 name=GeoQA
 qgisMinimumVersion=3.28
 description=Audit your vector layers for geometry, CRS, and attribute quality issues before spatial analysis.
