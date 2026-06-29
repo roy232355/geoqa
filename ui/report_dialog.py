@@ -787,7 +787,7 @@ class ReportDialog(QDialog):
     def open_repo(self):
         """Opens the plugin GitHub repository in the user's default browser."""
         import configparser
-        repo_url = "https://github.com/geoqa/geoqa"
+        repo_url = "https://github.com/roy232355/geoqa"
         try:
             meta_path = ResourceManager.get_config_path("metadata.txt")
             cfg = configparser.ConfigParser()
