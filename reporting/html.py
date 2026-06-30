@@ -170,10 +170,14 @@ def generate_html_report(
                     fids_all = ",".join(str(f) for f in issue.affected_features)
                     qgis_expr = f"$id IN ({fids_all})"
                     affected_html = (
-                        f'<span class="count">{len(issue.affected_features)} features</span>'
-                        f'<button class="btn-copy" onclick="navigator.clipboard.writeText(\'{qgis_expr}\')"'
-                        f' title="Copy QGIS selection query">📋 Copy</button><br>'
-                        f'<span class="mono small muted">{html.escape(", ".join(fids))}{html.escape(extra)}</span>'
+                        f'<div class="affected-wrapper">'
+                        f'  <div style="display:flex;align-items:center;gap:4px;">'
+                        f'    <span class="count">{len(issue.affected_features)} f</span>'
+                        f'    <button class="btn-copy" onclick="navigator.clipboard.writeText(\'{qgis_expr}\')"'
+                        f'     title="Copy QGIS selection query">📋 Copy</button>'
+                        f'  </div>'
+                        f'  <div class="fids-box">{html.escape(", ".join(fids))}{html.escape(extra)}</div>'
+                        f'</div>'
                     )
                 issue_rows += f"""
                 <tr>
@@ -229,13 +233,13 @@ def generate_html_report(
             <table>
               <thead>
                 <tr>
-                  <th style="width:7%">Code</th>
+                  <th style="width:8%">Code</th>
                   <th style="width:11%">Category</th>
                   <th style="width:9%">Severity</th>
                   <th style="width:10%">Field</th>
-                  <th style="width:28%">Message</th>
-                  <th style="width:25%">Recommendation</th>
-                  <th style="width:10%">Affected</th>
+                  <th style="width:26%">Message</th>
+                  <th style="width:21%">Recommendation</th>
+                  <th style="width:15%">Affected</th>
                 </tr>
               </thead>
               <tbody>{issue_rows}</tbody>
@@ -623,7 +627,6 @@ def generate_html_report(
     padding: 2px 6px;
     border-radius: 4px;
     cursor: pointer;
-    margin-left: 8px;
     transition: all 0.15s ease;
   }}
   .btn-copy:hover {{
@@ -633,6 +636,28 @@ def generate_html_report(
   }}
   .btn-copy:active {{
     background: #CBD5E1;
+  }}
+
+  .affected-wrapper {{
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    align-items: flex-start;
+  }}
+
+  .fids-box {{
+    max-height: 48px;
+    width: 100%;
+    overflow-y: auto;
+    font-family: "Consolas", "Courier New", monospace;
+    font-size: 11px;
+    color: #64748B;
+    background: #F8FAFC;
+    border: 1px solid #E2E8F0;
+    padding: 3px 6px;
+    border-radius: 4px;
+    word-break: break-all;
+    text-align: left;
   }}
 
   .card-search {{
