@@ -38,6 +38,8 @@ class RuleLoader:
         from .geometry.g001_invalid_geometry import G001_InvalidGeometry
         from .geometry.g002_empty_geometry import G002_EmptyGeometry
         from .geometry.g003_multipart_geometry import G003_MultipartGeometry
+        from .geometry.g004_duplicate_geometries import G004_DuplicateGeometries
+        from .geometry.g005_sliver_polygons import G005_SliverPolygons
 
         from .crs.c001_missing_crs import C001_MissingCRS
         from .crs.c002_geographic_crs import C002_GeographicCRS
@@ -48,11 +50,14 @@ class RuleLoader:
         from .attributes.a004_empty_strings import A004_EmptyStrings
         from .attributes.a005_duplicate_identifiers import A005_DuplicateIdentifiers
         from .attributes.a006_numeric_strings import A006_NumericStrings
+        from .attributes.a007_statistical_outliers import A007_StatisticalOutliers
 
         return [
             G001_InvalidGeometry(),
             G002_EmptyGeometry(),
             G003_MultipartGeometry(),
+            G004_DuplicateGeometries(),
+            G005_SliverPolygons(),
             C001_MissingCRS(),
             C002_GeographicCRS(),
             A001_LongFieldNames(),
@@ -61,6 +66,7 @@ class RuleLoader:
             A004_EmptyStrings(),
             A005_DuplicateIdentifiers(),
             A006_NumericStrings(),
+            A007_StatisticalOutliers(),
         ]
 
     @staticmethod
@@ -99,6 +105,9 @@ class RuleLoader:
                                     rule.severity = Severity(title_severity)
                                 except ValueError:
                                     pass
+
+                            if hasattr(rule, "load_config"):
+                                rule.load_config(config)
             except Exception as e:
                 from ..logger import log_warning
                 log_warning(f"Error reading rules.json configuration: {str(e)}")

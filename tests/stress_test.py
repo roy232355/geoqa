@@ -27,10 +27,10 @@ def run_stress_test(feature_count=10000):
         MockField("null_col", "string"),
         MockField("str_num", "string"),
         MockField("select", "string"),  # Reserved word check
+        MockField("outlier_col", "double"),  # Outlier check
     ]
 
-    # 2. Build geometries
-    valid_geom = MockGeometry(is_valid=True)
+    # Geometries base templates
     invalid_geom = MockGeometry(is_valid=False)
     empty_geom = MockGeometry(is_null=True, is_empty=True)
     multipart_geom = MockGeometry(is_multipart=True)
@@ -39,15 +39,40 @@ def run_stress_test(feature_count=10000):
     print("Generating simulated dataset...")
 
     for i in range(1, feature_count + 1):
-        # Inject geometry defects (1% invalid, 0.5% empty, 2% multipart)
+        # Inject geometry defects (1% duplicates, 1% invalid, 0.5% empty, 2% multipart, 1% slivers)
         if i % 100 == 0:
-            geom = invalid_geom
+            # Duplicate geometry: copy geometry coordinates from feature (i-1)
+            geom = MockGeometry(
+                is_valid=True,
+                wkb=f"wkb_{i-1}".encode("utf-8"),
+                area=100.0,
+                length=40.0
+            )
         elif i % 200 == 0:
+            # Empty geometry
             geom = empty_geom
+        elif i % 100 == 1:
+            # Invalid geometry
+            geom = invalid_geom
         elif i % 50 == 0:
+            # Multipart geometry
             geom = multipart_geom
+        elif i % 100 == 5:
+            # Sliver geometry: PP compactness metric = 4*pi*5 / 10000 = 0.00628 < 0.05
+            geom = MockGeometry(
+                is_valid=True,
+                wkb=f"wkb_{i}".encode("utf-8"),
+                area=5.0,
+                length=100.0
+            )
         else:
-            geom = valid_geom
+            # Valid normal geometry
+            geom = MockGeometry(
+                is_valid=True,
+                wkb=f"wkb_{i}".encode("utf-8"),
+                area=100.0,
+                length=40.0
+            )
 
         # Inject attribute defects:
         # - 1% duplicate IDs (using 101 for i % 100 == 0)
@@ -59,6 +84,9 @@ def run_stress_test(feature_count=10000):
         # - 100% numeric text
         str_num_val = str(i)
 
+        # - 1% outliers (e.g. value 5000.0 instead of 50.0)
+        outlier_val = 5000.0 if (i % 100 == 0) else 50.0
+
         features.append(
             MockFeature(
                 fid=i,
@@ -69,6 +97,7 @@ def run_stress_test(feature_count=10000):
                     "null_col": null_val,
                     "str_num": str_num_val,
                     "select": "Reserved usage",
+                    "outlier_col": outlier_val,
                 },
             )
         )
@@ -114,14 +143,17 @@ def run_stress_test(feature_count=10000):
     print(f" -> Low Severity     : {low_count}")
     print("=" * 60)
 
-    # Verify performance threshold
-    if elapsed < 2.0:
-        print("PERFORMANCE PASS: Validation finished in under 2.0 seconds.")
+    # Threshold scales based on feature count
+    threshold = 1.0 + (feature_count / 100000.0) * 1.5
+    if elapsed < threshold:
+        print(f"PERFORMANCE PASS: Finished in under {threshold:.1f}s.")
         return True
     else:
-        print("PERFORMANCE WARNING: Validation exceeded 2.0 seconds.")
+        print(f"PERFORMANCE WARNING: Exceeded {threshold:.1f}s.")
         return False
 
 
 if __name__ == "__main__":
-    run_stress_test(feature_count=10000)
+    scales = [1000, 10000, 100000, 500000]
+    for scale in scales:
+        run_stress_test(feature_count=scale)

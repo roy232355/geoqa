@@ -30,6 +30,9 @@ class MockField:
     def typeName(self):
         return self._type_name
 
+    def isNumeric(self):
+        return self._type_name.lower() in ("int", "integer", "double", "real", "longlong")
+
 
 class MockFields:
     """Mock for QgsFields."""
@@ -57,12 +60,16 @@ class MockGeometry:
     """Mock for QgsGeometry."""
 
     def __init__(
-        self, is_null=False, is_empty=False, is_valid=True, is_multipart=False
+        self, is_null=False, is_empty=False, is_valid=True, is_multipart=False,
+        wkb=b"mock_wkb", area=100.0, length=40.0
     ):
         self._is_null = is_null
         self._is_empty = is_empty
         self._is_valid = is_valid
         self._is_multipart = is_multipart
+        self._wkb = wkb
+        self._area = area
+        self._length = length
 
     def isNull(self):
         return self._is_null
@@ -75,6 +82,15 @@ class MockGeometry:
 
     def isMultipart(self):
         return self._is_multipart
+
+    def asWkb(self):
+        return self._wkb
+
+    def area(self):
+        return self._area
+
+    def length(self):
+        return self._length
 
 
 class MockFeature:

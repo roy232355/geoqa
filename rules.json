@@ -2,6 +2,8 @@
   "G001": { "enabled": true, "severity": "Critical" },
   "G002": { "enabled": true, "severity": "Critical" },
   "G003": { "enabled": true, "severity": "Medium" },
+  "G004": { "enabled": true, "severity": "High" },
+  "G005": { "enabled": true, "severity": "Medium", "compactness_threshold": 0.05 },
   "C001": { "enabled": true, "severity": "Critical" },
   "C002": { "enabled": true, "severity": "Low" },
   "A001": { "enabled": true, "severity": "Low" },
@@ -9,5 +11,6 @@
   "A003": { "enabled": true, "severity": "Medium" },
   "A004": { "enabled": true, "severity": "Medium" },
   "A005": { "enabled": true, "severity": "High" },
-  "A006": { "enabled": true, "severity": "Low" }
+  "A006": { "enabled": true, "severity": "Low" },
+  "A007": { "enabled": true, "severity": "Low" }
 }

@@ -41,11 +41,11 @@ class TestRuleLoader(unittest.TestCase):
     def test_profile_loading(self):
         geom_rules = RuleLoader.load_profile_rules("Geometry Only")
         geom_ids = {r.rule_id for r in geom_rules}
-        self.assertEqual(geom_ids, {"G001", "G002", "G003"})
+        self.assertEqual(geom_ids, {"G001", "G002", "G003", "G004", "G005"})
 
         attr_rules = RuleLoader.load_profile_rules("Attribute Only")
         attr_ids = {r.rule_id for r in attr_rules}
-        self.assertEqual(attr_ids, {"A001", "A002", "A003", "A004", "A005", "A006"})
+        self.assertEqual(attr_ids, {"A001", "A002", "A003", "A004", "A005", "A006", "A007"})
 
 
 class TestGeometryRules(unittest.TestCase):
@@ -369,6 +369,66 @@ class TestSDKManagers(unittest.TestCase):
 
         registry.unregister("G001")
         self.assertIsNone(registry.get_rule("G001"))
+
+
+class TestNewRules(unittest.TestCase):
+    """Unit tests for the new validation rules in GeoQA v1.1.0 (G004, G005, A007)."""
+
+    def test_g004_duplicate_geometries(self):
+        from core.rules.geometry.g004_duplicate_geometries import G004_DuplicateGeometries
+        from tests.mocks import MockVectorLayer, MockFeature, MockGeometry
+
+        feat1 = MockFeature(1, MockGeometry(wkb=b"wkb_a"), {})
+        feat2 = MockFeature(2, MockGeometry(wkb=b"wkb_b"), {})
+        feat3 = MockFeature(3, MockGeometry(wkb=b"wkb_a"), {})  # Duplicate of 1
+
+        layer = MockVectorLayer("Duplicate Test", geom_type=2, features=[feat1, feat2, feat3])
+        rule = G004_DuplicateGeometries()
+        issues = rule.evaluate(layer)
+
+        self.assertEqual(len(issues), 1)
+        self.assertEqual(issues[0].rule_id, "G004")
+        self.assertEqual(issues[0].affected_features, [3])
+
+        layer_no_dups = MockVectorLayer("Clean Test", geom_type=2, features=[feat1, feat2])
+        self.assertEqual(len(rule.evaluate(layer_no_dups)), 0)
+
+    def test_g005_sliver_polygons(self):
+        from core.rules.geometry.g005_sliver_polygons import G005_SliverPolygons
+        from tests.mocks import MockVectorLayer, MockFeature, MockGeometry
+
+        normal_feat = MockFeature(1, MockGeometry(area=100.0, length=40.0), {})
+        sliver_feat = MockFeature(2, MockGeometry(area=10.0, length=100.0), {})
+
+        layer = MockVectorLayer("Sliver Test", geom_type=2, features=[normal_feat, sliver_feat])
+        rule = G005_SliverPolygons()
+
+        issues = rule.evaluate(layer)
+        self.assertEqual(len(issues), 1)
+        self.assertEqual(issues[0].rule_id, "G005")
+        self.assertEqual(issues[0].affected_features, [2])
+
+        rule.load_config({"compactness_threshold": 0.01})
+        self.assertEqual(len(rule.evaluate(layer)), 0)
+
+    def test_a007_statistical_outliers(self):
+        from core.rules.attributes.a007_statistical_outliers import A007_StatisticalOutliers
+        from tests.mocks import MockVectorLayer, MockFeature, MockField
+
+        fields = [MockField("val", "double")]
+        features = [MockFeature(i, None, {"val": 10.0 + (i % 3)}) for i in range(1, 11)]
+        features.append(MockFeature(11, None, {"val": 1000.0}))
+
+        layer = MockVectorLayer("Outlier Test", geom_type=2, features=features, fields=fields)
+        rule = A007_StatisticalOutliers()
+        issues = rule.evaluate(layer)
+
+        self.assertEqual(len(issues), 1)
+        self.assertEqual(issues[0].rule_id, "A007")
+        self.assertEqual(issues[0].affected_features, [11])
+
+        small_layer = MockVectorLayer("Small Test", geom_type=2, features=features[:5], fields=fields)
+        self.assertEqual(len(rule.evaluate(small_layer)), 0)
 
 
 if __name__ == "__main__":

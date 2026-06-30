@@ -21,6 +21,22 @@ This document lists all built-in validation rules supported by the GeoQA framewo
 * **Description**: Flags features containing multiple disjoint spatial parts (e.g. multi-polygons).
 * **Recommendation**: If your downstream GIS analysis requires singlepart features, execute the QGIS 'Multipart to singleparts' tool.
 
+### `G004`: Duplicate Geometries
+* **Default Severity**: `High`
+* **Description**: Flags features containing identical geometry coordinate footprints.
+* **Logic:** Computes the Well-Known Binary (WKB) bytes representation of each feature geometry and flags exact matching byte sequences in a single-pass hash map check.
+* **Limitations/False Positives:** Points, lines, or polygons that represent different spatial objects but are stacked exactly on top of each other will be flagged.
+* **Recommendation**: Remove duplicate features or use the QGIS 'Delete duplicate geometries' processing tool.
+
+### `G005`: Sliver Polygons
+* **Default Severity**: `Medium`
+* **Description**: Flags extremely narrow or thin polygons typical of clipping boundary mismatches.
+* **Logic:** Computes the Polsby-Popper compactness metric:
+  $$PP = \frac{4\pi \times \text{Area}}{\text{Perimeter}^2}$$
+  Flags any polygon with $PP$ below the configured threshold (default: `0.05`).
+* **Limitations/False Positives:** Legitimate elongated features such as rivers, roads, medians, or thin buffer zones will be flagged. Inspect visually before deleting.
+* **Recommendation**: Verify if this polygon is an accidental sliver artifact from clipping/alignment. Clean using the QGIS 'Snap geometries to layer' tool or perform manual vertex editing.
+
 ---
 
 ## 🌐 Coordinate Reference System Rules (`C0xx`)
@@ -68,3 +84,10 @@ This document lists all built-in validation rules supported by the GeoQA framewo
 * **Default Severity**: `Low`
 * **Description**: Checks if string-type fields contain exclusively numeric data.
 * **Recommendation**: Convert the field data type to Integer or Double to optimize storage size and enable mathematical operations.
+
+### `A007`: Statistical Outliers
+* **Default Severity**: `Low`
+* **Description**: Flags values in numeric columns that deviate significantly from the column mean.
+* **Logic:** Calculates the mean ($\mu$) and standard deviation ($\sigma$) for each numeric field. Any feature with a value $x$ satisfying $|x - \mu| > 3\sigma$ is flagged as an outlier.
+* **Limitations/False Positives:** Highly skewed datasets (e.g. populations, areas, income) naturally have valid outliers at the high end. The rule is only executed on fields with 10 or more records.
+* **Recommendation**: Value deviates significantly from the field average (greater than 3 standard deviations). Verify if this is a data entry typo.
