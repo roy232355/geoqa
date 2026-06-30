@@ -167,8 +167,12 @@ def generate_html_report(
                 if issue.affected_features:
                     fids = [str(f) for f in issue.affected_features[:20]]
                     extra = f" +{len(issue.affected_features) - 20} more" if len(issue.affected_features) > 20 else ""
+                    fids_all = ",".join(str(f) for f in issue.affected_features)
+                    qgis_expr = f"$id IN ({fids_all})"
                     affected_html = (
-                        f'<span class="count">{len(issue.affected_features)} features</span><br>'
+                        f'<span class="count">{len(issue.affected_features)} features</span>'
+                        f'<button class="btn-copy" onclick="navigator.clipboard.writeText(\'{qgis_expr}\')"'
+                        f' title="Copy QGIS selection query">📋 Copy</button><br>'
                         f'<span class="mono small muted">{html.escape(", ".join(fids))}{html.escape(extra)}</span>'
                     )
                 issue_rows += f"""
@@ -212,6 +216,7 @@ def generate_html_report(
               <span class="pill">{layer.feature_count:,} features</span>
             </div>
             <div class="layer-right">
+              <input type="text" class="card-search" placeholder="Filter issues..." onkeyup="filterTable(this)">
               <span class="muted small" style="margin-right:8px;">{checks_label}</span>
               <span class="layer-score">{ls}/100</span>
               <span class="status-badge" style="{status_style}">{status_label}</span>
@@ -606,6 +611,45 @@ def generate_html_report(
   .muted {{ color: #64748B; }}
   .small {{ font-size: 12px; }}
   .count {{ font-weight: 700; color: #1E293B; }}
+  
+  .btn-copy {{
+    display: inline-flex;
+    align-items: center;
+    background: #F1F5F9;
+    border: 1px solid #CBD5E1;
+    color: #475569;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 2px 6px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-left: 8px;
+    transition: all 0.15s ease;
+  }}
+  .btn-copy:hover {{
+    background: #E2E8F0;
+    color: #1E293B;
+    border-color: #94A3B8;
+  }}
+  .btn-copy:active {{
+    background: #CBD5E1;
+  }}
+
+  .card-search {{
+    padding: 4px 8px;
+    font-size: 11.5px;
+    border: 1px solid #CBD5E1;
+    border-radius: 4px;
+    outline: none;
+    width: 110px;
+    margin-right: 16px;
+    transition: all 0.15s ease;
+  }}
+  .card-search:focus {{
+    border-color: #3B82F6;
+    width: 150px;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.15);
+  }}
 
   /* ── Footer ── */
   footer {{
@@ -649,7 +693,7 @@ def generate_html_report(
     <div class="meta-list">
       <div class="m-item"><div class="m-lbl">Report ID</div><div class="m-val mono">{report_id}</div></div>
       <div class="m-item"><div class="m-lbl">Profile</div><div class="m-val">{html.escape(project_summary.profile_name)}</div></div>
-      <div class="m-item"><div class="m-lbl">Plugin</div><div class="m-val">GeoQA v1.0.0</div></div>
+      <div class="m-item"><div class="m-lbl">Plugin</div><div class="m-val">GeoQA v1.1.0</div></div>
       <div class="m-item"><div class="m-lbl">QGIS</div><div class="m-val">{html.escape(qgis_version)}</div></div>
       <div class="m-item"><div class="m-lbl">Generated</div><div class="m-val">{now}</div></div>
     </div>
@@ -730,6 +774,18 @@ def generate_html_report(
   </footer>
 
 </div>
+<script>
+function filterTable(input) {{
+  var filter = input.value.toLowerCase();
+  var card = input.closest('.card');
+  var trs = card.querySelectorAll('tbody tr');
+  trs.forEach(function(tr) {{
+    if (tr.querySelector('.pass-cell')) return;
+    var text = tr.innerText.toLowerCase();
+    tr.style.display = text.indexOf(filter) > -1 ? '' : 'none';
+  }});
+}}
+</script>
 </body>
 </html>
 """
