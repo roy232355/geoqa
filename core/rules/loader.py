@@ -18,6 +18,8 @@ class RuleLoader:
             "G001",
             "G002",
             "G003",
+            "G004",
+            "G005",
             "C001",
             "C002",
             "A001",
@@ -26,9 +28,10 @@ class RuleLoader:
             "A004",
             "A005",
             "A006",
+            "A007",
         ],
-        "Geometry Only": ["G001", "G002", "G003"],
-        "Attribute Only": ["A001", "A002", "A003", "A004", "A005", "A006"],
+        "Geometry Only": ["G001", "G002", "G003", "G004", "G005"],
+        "Attribute Only": ["A001", "A002", "A003", "A004", "A005", "A006", "A007"],
         "Database Compliance": ["C001", "A002", "A005"],
     }
 
