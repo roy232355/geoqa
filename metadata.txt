@@ -16,4 +16,4 @@ category=Vector
 hasProcessingProvider=yes
 experimental=False
 deprecated=False
-changelog=1.1.2 - Added duplicate geometry detection (G004), sliver polygon detection (G005), and statistical outlier checks (A007). Expanded performance stress testing to 500k features. Fixes various Flake8 quality warnings.\n1.0.0 - Initial release. Geometry, CRS, and attribute validation with HTML and CSV reporting, scoring, and QGIS Processing integration.
+changelog=1.1.2 - Resolved strict Flake8 formatting issues (W293, E226) and optimized plugin icon size to pass QGIS portal security and quality scans.\n1.1.0 - Added duplicate geometry detection (G004), sliver polygon detection (G005), and statistical outlier checks (A007). Expanded performance stress testing to 500k features. Fixes various Flake8 quality warnings.\n1.0.0 - Initial release. Geometry, CRS, and attribute validation with HTML and CSV reporting, scoring, and QGIS Processing integration.
