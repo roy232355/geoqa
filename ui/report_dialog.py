@@ -76,7 +76,7 @@ class ReportDialog(QDialog):
         header_layout = QHBoxLayout()
         title_lbl = QLabel("GeoQA Quality Auditor")
         title_lbl.setStyleSheet("font-size: 18px; font-weight: bold; color: #1E3A8A;")
-        version_lbl = QLabel("v1.1.0")
+        version_lbl = QLabel("v1.1.2")
         version_lbl.setStyleSheet("font-weight: bold; color: #94A3B8; font-size: 11px;")
 
         header_layout.addWidget(title_lbl)
@@ -101,7 +101,7 @@ class ReportDialog(QDialog):
         # Footer Actions
         bottom_layout = QHBoxLayout()
 
-        footer_brand_lbl = QLabel("GeoQA v1.1.0")
+        footer_brand_lbl = QLabel("GeoQA v1.1.2")
         footer_brand_lbl.setStyleSheet("font-weight: bold; color: #94A3B8; font-size: 11px;")
 
         self.open_last_report_btn = QPushButton("Open Last Report")
@@ -330,7 +330,7 @@ class ReportDialog(QDialog):
         except Exception:
             rule_count = "14"
 
-        cards_layout.addWidget(make_card("Version", "1.1.0"), 0, 0)
+        cards_layout.addWidget(make_card("Version", "1.1.2"), 0, 0)
         cards_layout.addWidget(make_card("License", "GPL v3"), 0, 1)
         cards_layout.addWidget(make_card("Rules", rule_count), 1, 0)
         cards_layout.addWidget(make_card("QGIS", "3.28+"), 1, 1)

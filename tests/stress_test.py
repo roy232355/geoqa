@@ -44,7 +44,7 @@ def run_stress_test(feature_count=10000):
             # Duplicate geometry: copy geometry coordinates from feature (i-1)
             geom = MockGeometry(
                 is_valid=True,
-                wkb=f"wkb_{i-1}".encode("utf-8"),
+                wkb=f"wkb_{i - 1}".encode("utf-8"),
                 area=100.0,
                 length=40.0
             )
