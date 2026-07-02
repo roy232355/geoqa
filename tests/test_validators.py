@@ -372,7 +372,7 @@ class TestSDKManagers(unittest.TestCase):
 
 
 class TestNewRules(unittest.TestCase):
-    """Unit tests for the new validation rules in GeoQA v1.1.2 (G004, G005, A007)."""
+    """Unit tests for the new validation rules in GeoQA v1.1.3 (G004, G005, A007)."""
 
     def test_g004_duplicate_geometries(self):
         from core.rules.geometry.g004_duplicate_geometries import G004_DuplicateGeometries

@@ -718,7 +718,7 @@ def generate_html_report(
     <div class="meta-list">
       <div class="m-item"><div class="m-lbl">Report ID</div><div class="m-val mono">{report_id}</div></div>
       <div class="m-item"><div class="m-lbl">Profile</div><div class="m-val">{html.escape(project_summary.profile_name)}</div></div>
-      <div class="m-item"><div class="m-lbl">Plugin</div><div class="m-val">GeoQA v1.1.2</div></div>
+      <div class="m-item"><div class="m-lbl">Plugin</div><div class="m-val">GeoQA v1.1.3</div></div>
       <div class="m-item"><div class="m-lbl">QGIS</div><div class="m-val">{html.escape(qgis_version)}</div></div>
       <div class="m-item"><div class="m-lbl">Generated</div><div class="m-val">{now}</div></div>
     </div>
